@@ -9,14 +9,19 @@ class AIComputerOpponent {
     public int pickSpot(TicTacToeLogic game) {
         ArrayList<Integer> choices = new ArrayList();
         for (int i = 0; i < 9; i++) {
-            // If the slot is not taken, add it as a choice
+            // AI choises spot on board
             if (game.board[i] == '-') {
+                
                 choices.add(i + 1);
+                
             }
         }
+        //This is randomized
         Random rand = new Random();
-        int choice = choices.get(Math.abs(rand.nextInt() % choices.size()));
-        return choice;
+        
+        
+        int num = choices.get(Math.abs(rand.nextInt() % choices.size()));
+        return num;
     }
     
     
