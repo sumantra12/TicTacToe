@@ -1,1 +1,211 @@
+package tictactoeapplication;
+//Sumantra Das
+//April 15, 2020
+//THis is the logic part of tictactoe and is where most of the game is happening 
 
+
+
+
+public class TicTacToeLogic {
+    
+//main variables
+protected char currentmarker;
+protected char Winner;
+protected char[] board;
+protected char usermarker;
+protected char aiMarker;
+
+    
+    
+    public TicTacToeLogic(char playercharacter, char aiMarker) {
+        
+        this.usermarker = playercharacter;
+        
+        this.aiMarker = aiMarker;
+        
+        this.Winner = '-';
+        
+        this.board = Board();
+        
+        this.currentmarker = usermarker;
+    }
+    
+    //boardsize
+    public static char[] Board() {
+        
+        char[] board = new char[9];
+        
+        for (int i = 0; i < board.length; i++) {
+            
+            board[i] = '-';
+            
+        }
+        
+        return board;
+    }
+    
+    //when its player turn it takes away one spot
+    public boolean playerTurn(int spot) {
+        
+        boolean isvalid = withinrange(spot) && !nospot(spot);
+        
+        //if the spot is not taken
+        if (isvalid) {
+            
+            board[spot-1] = currentmarker;
+            currentmarker = (currentmarker == usermarker) ? aiMarker : usermarker;
+            
+        }
+        
+        return isvalid;
+    }
+    
+ //checks if the spot is in range
+    public boolean withinrange(int number) {
+        
+        return number > 0 && number < board.length + 1;
+        
+    }
+    
+//if the spot is not taken
+    public boolean nospot(int number) {
+        
+        return board[number-1] != '-';
+    }
+    
+    //prints out the board
+    public void tictactoeBoard() {
+        
+        System.out.println();
+        for (int i = 0; i < board.length; i++) {
+            
+            if (i % 3 == 0 && i != 0) {
+                
+                System.out.println();
+                System.out.println("------------");
+                
+            }
+            System.out.print(" | " + board[i]);
+        }
+        System.out.println();
+
+    }
+    
+    //index number for board
+    public static void IndexBoard() {
+        
+         System.out.println();
+         
+        for (int i = 0; i < 9; i++) {
+            
+            if (i % 3 == 0 && i != 0) {
+                
+                System.out.println();
+                
+                System.out.println("------------");
+            }
+            
+            System.out.print(" | " + (i + 1));
+        }
+        System.out.println();
+    }
+    
+    //checks if their is a winner
+    public boolean isThereAWinner() {
+        
+        boolean diagonalAndMiddle = (rightDi() || leftDi() || middleRow() || secondColumn()) && board[4] != '-';
+        
+        boolean topFirst = (topRow() || firstColumn()) && board[0] != '-';
+        
+        boolean bottomThird = (bottomRow() || thirdColumn()) && board[8] != '-';
+        
+        if (diagonalAndMiddle) {
+            
+            this.Winner = board[4];
+        } 
+        else if (topFirst) {
+            
+            this.Winner = board[0];
+        } 
+        else if (bottomThird) {
+            
+            this.Winner = board[8];
+        }
+        return diagonalAndMiddle || topFirst || bottomThird;
+    }
+    
+  public boolean topRow() {
+      
+      return board[0] == board[1] && board[1] == board[2];
+  }
+  
+  public boolean middleRow() {
+      
+      return board[3] == board[4] && board[4] == board[5];
+  }
+  
+  public boolean bottomRow() {
+      
+      return board[6] == board[7] && board[7] == board[8];
+  }
+  
+  public boolean firstColumn() {
+      
+      return board[0] == board[3] && board[3] == board[6];
+  }
+  
+  public boolean secondColumn() {
+      
+      return board[1] == board[4] && board[4] == board[7];
+  }
+  
+  public boolean thirdColumn() {
+      
+      return board[2] == board[5] && board[5] == board[8];
+  }
+  
+  public boolean rightDi() {
+      
+      return board[0] == board[4] && board[4] == board[8]; 
+  }
+  
+  public boolean leftDi() {
+      
+      return board[2] == board[4] && board[4] == board[6];
+  }
+  
+  //if the board is filled
+  public boolean TheBoardFill() {
+      
+      for (int i = 0; i < board.length; i++) {
+          
+          if (board[i] == '-') {
+              
+              return false;
+          }
+      }
+      
+      return true;
+  }
+  
+  //commands see if the game is over, if their is winner or draw
+  public String GameOver() {
+      
+      boolean someonewin = isThereAWinner();
+      
+      if (someonewin) {
+          return "The winner for this round is " + this.Winner + "'s";
+          
+      } else if (TheBoardFill()) {
+          
+          return "Game Over: Draw";
+      } 
+      else {
+          
+          return "notOver";
+      }
+      
+  }
+    
+}
+  
